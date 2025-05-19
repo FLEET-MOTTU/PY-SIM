@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 import httpx
 import datetime
 import os
+from typing import Any, Dict
 
 app = FastAPI(
     title="Simulador de Eventos IoT",
@@ -74,3 +75,31 @@ async def simular_status_bateria(tag_id: str, nivel_bateria: int):
     }
     endpoint_csharp = f"tags/{tag_id}/status"
     return await enviar_evento_para_api_csharp(endpoint_csharp, payload, method="PATCH")
+
+@app.post("/simular/interacao_tag", summary="Simula uma interação completa de tag com beacon")
+async def simular_interacao_tag(
+    codigo_unico_tag: str,
+    beacon_id_detectado: str,
+    timestamp_evento: datetime.datetime | None = None,
+    nivel_bateria: int | None = None,
+    tipo_evento_custom: str | None = None
+):
+    """
+    Simula uma tag sendo detectada por um beacon.
+    Este evento pode incluir a localização, timestamp, nível da bateria e um tipo de evento.
+    A API C# terá um endpoint para receber este payload (ex: /api/iot-events/tag-interaction).
+    """
+    payload: Dict[str, Any] = {
+        "codigoUnicoTag": codigo_unico_tag,
+        "beaconIdDetectado": beacon_id_detectado,
+        "timestamp": (timestamp_evento or datetime.datetime.utcnow()).isoformat() + "Z"
+    }
+    if nivel_bateria is not None:
+        payload["nivelBateria"] = nivel_bateria
+    if tipo_evento_custom is not None:
+        payload["tipoEvento"] = tipo_evento_custom
+
+    endpoint_csharp_target = "iot-events/tag-interaction"
+    
+    print(f"Simulador enviando para C#: {endpoint_csharp_target} com payload: {payload}")
+    return await enviar_evento_para_api_csharp(endpoint_csharp_target, payload, method="POST")
