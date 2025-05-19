@@ -21,6 +21,8 @@ async def enviar_evento_para_api_csharp(endpoint_csharp: str, payload: dict, met
 
     url_completa = f"{CSHARP_API_BASE_URL.rstrip('/')}/{endpoint_csharp.lstrip('/')}"
     headers = {'Content-Type': 'application/json'}
+    print(f"Simulador tentando enviar para: {method} {url_completa}")
+    print(f"Simulador enviando payload: {payload}")
 
     try:
         async with httpx.AsyncClient() as client:
@@ -28,7 +30,6 @@ async def enviar_evento_para_api_csharp(endpoint_csharp: str, payload: dict, met
                 response = await client.post(url_completa, json=payload, headers=headers)
             elif method.upper() == "PATCH":
                 response = await client.patch(url_completa, json=payload, headers=headers)
-            # Adicione outros métodos (PUT, DELETE) se necessário
             else:
                 raise ValueError(f"Método HTTP '{method}' não suportado pela função de envio.")
 
@@ -99,7 +100,7 @@ async def simular_interacao_tag(
     if tipo_evento_custom is not None:
         payload["tipoEvento"] = tipo_evento_custom
 
-    endpoint_csharp_target = "iot-events/tag-interaction"
+    endpoint_csharp_target = "api/iot-events/tag-interaction"
     
     print(f"Simulador enviando para C#: {endpoint_csharp_target} com payload: {payload}")
     return await enviar_evento_para_api_csharp(endpoint_csharp_target, payload, method="POST")
