@@ -3,6 +3,9 @@ import httpx
 import datetime
 import os
 from typing import Any, Dict
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(
     title="Simulador de Eventos IoT",
@@ -17,7 +20,7 @@ async def enviar_evento_para_api_csharp(endpoint_csharp: str, payload: dict, met
     Função genérica para enviar um evento para a API C#
     """
     if not CSHARP_API_BASE_URL:
-        raise HTTPException(status_code=400, detail="CSHARP_API_BASE_URL não configurada.")
+        raise HTTPException(status_code=500, detail="CSHARP_API_BASE_URL não configurada.")
 
     url_completa = f"{CSHARP_API_BASE_URL.rstrip('/')}/{endpoint_csharp.lstrip('/')}"
     headers = {'Content-Type': 'application/json'}
@@ -49,33 +52,33 @@ async def root():
     return {"message": "Simulador de IoT up. /docs ve as opções"}
 
 
-@app.post("/simular/movimentacao_tag", summary="Simula a movimentação de uma tag")
-async def simular_movimentacao(tag_id: str, beacon_id: str, tipo_evento: str = "entry"):
-    """
-    Simula uma tag entrando ('entry') ou saindo ('exit') da área de um beacon.
-    """
-    payload = {
-        "tagId": tag_id,
-        "beaconId": beacon_id,
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
-        "eventType": tipo_evento
-    }
-    endpoint_csharp = "movimentacoes"
-    return await enviar_evento_para_api_csharp(endpoint_csharp, payload, method="POST")
+# @app.post("/simular/movimentacao_tag", summary="Simula a movimentação de uma tag")
+# async def simular_movimentacao(tag_id: str, beacon_id: str, tipo_evento: str = "entry"):
+#     """
+#     Simula uma tag entrando ('entry') ou saindo ('exit') da área de um beacon.
+#     """
+#     payload = {
+#         "tagId": tag_id,
+#         "beaconId": beacon_id,
+#         "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+#         "eventType": tipo_evento
+#     }
+#     endpoint_csharp = "movimentacoes"
+#     return await enviar_evento_para_api_csharp(endpoint_csharp, payload, method="POST")
 
 
-@app.post("/simular/status_bateria_tag", summary="Simula uma atualização de status da bateria da tag")
-async def simular_status_bateria(tag_id: str, nivel_bateria: int):
-    """
-    Simula uma atualização do nível de bateria de uma tag.
-    A API C# deverá ter um endpoint para receber esse status (ex: /tags/{id}/status ou /alertas).
-    """
-    payload = {
-        "batteryLevel": nivel_bateria,
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z"
-    }
-    endpoint_csharp = f"tags/{tag_id}/status"
-    return await enviar_evento_para_api_csharp(endpoint_csharp, payload, method="PATCH")
+# @app.post("/simular/status_bateria_tag", summary="Simula uma atualização de status da bateria da tag")
+# async def simular_status_bateria(tag_id: str, nivel_bateria: int):
+#     """
+#     Simula uma atualização do nível de bateria de uma tag.
+#     A API C# deverá ter um endpoint para receber esse status (ex: /tags/{id}/status ou /alertas).
+#     """
+#     payload = {
+#         "batteryLevel": nivel_bateria,
+#         "timestamp": datetime.datetime.utcnow().isoformat() + "Z"
+#     }
+#     endpoint_csharp = f"tags/{tag_id}/status"
+#     return await enviar_evento_para_api_csharp(endpoint_csharp, payload, method="PATCH")
 
 @app.post("/simular/interacao_tag", summary="Simula uma interação completa de tag com beacon")
 async def simular_interacao_tag(

@@ -1,7 +1,7 @@
 FROM python:3.12.3-slim-bookworm AS python-base
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 FROM python-base AS builder
 
@@ -14,9 +14,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 FROM python-base AS final
 
-WORKDIR /opt/app
+WORKDIR /app
 
-COPY ./src /opt/app/src 
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+COPY ./src /app/src
+COPY .env /app/.env
 
 EXPOSE 80
 

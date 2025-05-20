@@ -1,0 +1,348 @@
+{
+    "info": {
+        "_postman_id": "PYTHON_SIMULATOR_COLLECTION_ID",
+        "name": "Mottu Python IoT Simulator - Testes",
+        "description": "Coleção de testes para o Simulador Python de Eventos IoT que interage com a API C# da Mottu.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Test Case 1: Primeira Detecção da Moto",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code is 200 OK (Simulator OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "var jsonData = pm.response.json();",
+                            "pm.test(\"Simulator sent event successfully to C# API\", function() {",
+                            "    pm.expect(jsonData.status_simulador).to.eql(\"Evento enviado com sucesso para API C#\");",
+                            "});",
+                            "pm.test(\"C# API responded with 202 Accepted\", function() {",
+                            "    pm.expect(jsonData.status_code_csharp).to.eql(202);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{pythonSimulatorBaseUrl}}/simular/interacao_tag?codigo_unico_tag={{targetTagCodigoUnico}}&beacon_id_detectado={{beaconEntrada}}&nivel_bateria=98&timestamp_evento={{$isoTimestamp}}&tipo_evento_custom=primeira_deteccao",
+                    "host": [
+                        "{{pythonSimulatorBaseUrl}}"
+                    ],
+                    "path": [
+                        "simular",
+                        "interacao_tag"
+                    ],
+                    "query": [
+                        {
+                            "key": "codigo_unico_tag",
+                            "value": "{{targetTagCodigoUnico}}"
+                        },
+                        {
+                            "key": "beacon_id_detectado",
+                            "value": "{{beaconEntrada}}"
+                        },
+                        {
+                            "key": "timestamp_evento",
+                            "value": "{{$isoTimestamp}}"
+                        },
+                        {
+                            "key": "nivel_bateria",
+                            "value": "98"
+                        },
+                        {
+                            "key": "tipo_evento_custom",
+                            "value": "primeira_deteccao"
+                        }
+                    ]
+                },
+                "description": "Simula a moto '{{targetTagCodigoUnico}}' sendo detectada pela primeira vez no '{{beaconEntrada}}' com bateria 98%."
+            },
+            "response": []
+        },
+        {
+            "name": "Test Case 2: Moto Move e Bateria Diminui",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code is 200 OK (Simulator OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "// Adicione mais testes se necessário"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{pythonSimulatorBaseUrl}}/simular/interacao_tag?codigo_unico_tag={{targetTagCodigoUnico}}&beacon_id_detectado={{beaconManutencao}}&nivel_bateria=95&timestamp_evento={{$isoTimestamp}}&tipo_evento_custom=movimento_para_manutencao",
+                    "host": [
+                        "{{pythonSimulatorBaseUrl}}"
+                    ],
+                    "path": [
+                        "simular",
+                        "interacao_tag"
+                    ],
+                    "query": [
+                        {
+                            "key": "codigo_unico_tag",
+                            "value": "{{targetTagCodigoUnico}}"
+                        },
+                        {
+                            "key": "beacon_id_detectado",
+                            "value": "{{beaconManutencao}}"
+                        },
+                        {
+                            "key": "timestamp_evento",
+                            "value": "{{$isoTimestamp}}"
+                        },
+                        {
+                            "key": "nivel_bateria",
+                            "value": "95"
+                        },
+                        {
+                            "key": "tipo_evento_custom",
+                            "value": "movimento_para_manutencao"
+                        }
+                    ]
+                },
+                "description": "Simula a moto '{{targetTagCodigoUnico}}' movendo para '{{beaconManutencao}}' com bateria 95%."
+            },
+            "response": []
+        },
+        {
+            "name": "Test Case 3: Atualização Apenas da Bateria",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code is 200 OK (Simulator OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{pythonSimulatorBaseUrl}}/simular/interacao_tag?codigo_unico_tag={{targetTagCodigoUnico}}&beacon_id_detectado={{beaconManutencao}}&nivel_bateria=93&timestamp_evento={{$isoTimestamp}}&tipo_evento_custom=update_bateria",
+                    "host": [
+                        "{{pythonSimulatorBaseUrl}}"
+                    ],
+                    "path": [
+                        "simular",
+                        "interacao_tag"
+                    ],
+                    "query": [
+                        {
+                            "key": "codigo_unico_tag",
+                            "value": "{{targetTagCodigoUnico}}"
+                        },
+                        {
+                            "key": "beacon_id_detectado",
+                            "value": "{{beaconManutencao}}"
+                        },
+                        {
+                            "key": "timestamp_evento",
+                            "value": "{{$isoTimestamp}}"
+                        },
+                        {
+                            "key": "nivel_bateria",
+                            "value": "93"
+                        },
+                        {
+                            "key": "tipo_evento_custom",
+                            "value": "update_bateria"
+                        }
+                    ]
+                },
+                "description": "Simula a moto '{{targetTagCodigoUnico}}' no mesmo beacon '{{beaconManutencao}}' com bateria 93%."
+            },
+            "response": []
+        },
+        {
+            "name": "Test Case 4: Evento para Tag Desconhecida",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code is 200 OK (Simulator OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "var jsonData = pm.response.json();",
+                            "pm.test(\"C# API responded with 202 Accepted (as it logs unknown tags)\", function() {",
+                            "    pm.expect(jsonData.status_code_csharp).to.eql(202);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{pythonSimulatorBaseUrl}}/simular/interacao_tag?codigo_unico_tag={{unknownTagCodigoUnico}}&beacon_id_detectado={{beaconQualquer}}&nivel_bateria=70&timestamp_evento={{$isoTimestamp}}",
+                    "host": [
+                        "{{pythonSimulatorBaseUrl}}"
+                    ],
+                    "path": [
+                        "simular",
+                        "interacao_tag"
+                    ],
+                    "query": [
+                        {
+                            "key": "codigo_unico_tag",
+                            "value": "{{unknownTagCodigoUnico}}"
+                        },
+                        {
+                            "key": "beacon_id_detectado",
+                            "value": "{{beaconQualquer}}"
+                        },
+                        {
+                            "key": "timestamp_evento",
+                            "value": "{{$isoTimestamp}}"
+                        },
+                        {
+                            "key": "nivel_bateria",
+                            "value": "70"
+                        }
+                    ]
+                },
+                "description": "Simula um evento para uma tag '{{unknownTagCodigoUnico}}' que não deve existir na API C#."
+            },
+            "response": []
+        },
+        {
+            "name": "Test Case 5: Evento Sem Nível de Bateria",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code is 200 OK (Simulator OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{pythonSimulatorBaseUrl}}/simular/interacao_tag?codigo_unico_tag={{targetTagCodigoUnico}}&beacon_id_detectado={{beaconSaida}}&timestamp_evento={{$isoTimestamp}}&tipo_evento_custom=movimento_sem_bateria",
+                    "host": [
+                        "{{pythonSimulatorBaseUrl}}"
+                    ],
+                    "path": [
+                        "simular",
+                        "interacao_tag"
+                    ],
+                    "query": [
+                        {
+                            "key": "codigo_unico_tag",
+                            "value": "{{targetTagCodigoUnico}}"
+                        },
+                        {
+                            "key": "beacon_id_detectado",
+                            "value": "{{beaconSaida}}"
+                        },
+                        {
+                            "key": "timestamp_evento",
+                            "value": "{{$isoTimestamp}}"
+                        },
+                        {
+                            "key": "tipo_evento_custom",
+                            "value": "movimento_sem_bateria"
+                        }
+                    ]
+                },
+                "description": "Simula a moto '{{targetTagCodigoUnico}}' movendo para '{{beaconSaida}}' sem enviar nível de bateria."
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "pythonSimulatorBaseUrl",
+            "value": "http://localhost:8001",
+            "type": "string",
+            "description": "URL base do Simulador Python FastAPI. Altere a porta se necessário (ex: 9090)."
+        },
+        {
+            "key": "targetTagCodigoUnico",
+            "value": "TAGMOT0B03",
+            "type": "string",
+            "description": "Código de uma tag existente na API C# (ex: da moto de exemplo que você cadastrou)."
+        },
+        {
+            "key": "unknownTagCodigoUnico",
+            "value": "TAG_FANTASMA_XYZ",
+            "type": "string"
+        },
+        {
+            "key": "beaconEntrada",
+            "value": "BEACON_ENTRADA_P1",
+            "type": "string"
+        },
+        {
+            "key": "beaconManutencao",
+            "value": "BEACON_MANUTENCAO_S1",
+            "type": "string"
+        },
+        {
+            "key": "beaconSaida",
+            "value": "BEACON_SAIDA_P1",
+            "type": "string"
+        },
+        {
+            "key": "beaconQualquer",
+            "value": "BEACON_ZONA_TESTE",
+            "type": "string"
+        }
+    ]
+}
