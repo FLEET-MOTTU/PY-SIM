@@ -28,19 +28,30 @@ Para rodar este simulador usando Docker, você precisará de:
 Este simulador foi projetado para ser executado como um container Docker.
 
 **1. Construir a Imagem Docker do Simulador:**
-   * Clone este repositório (git clone https://github.com/FLEET-MOTTU/PY-SIM)
-   * No seu terminal, a partir da pasta raiz do projeto `PY-SIM` (onde está o `Dockerfile`), execute:
-     docker build -t mottu-py-simulator .
-     Isso construirá a imagem Docker com o nome `mottu-py-simulator`.
+* Clone este repositório
+   
+```sh
+git clone https://github.com/FLEET-MOTTU/PY-SIM
+```
+
+* No seu terminal, a partir da pasta raiz do projeto `PY-SIM` (onde está o `Dockerfile`), execute:
+
+```sh
+docker build -t mottu-py-simulator .
+```
+
+* Isso construirá a imagem Docker com o nome `mottu-py-simulator`.
 
 **2. Configurar a URL da API C#:**
-   O simulador precisa saber para onde enviar os eventos. Isso é feito através da variável de ambiente `CSHARP_API_BASE_URL`.
-   * Quando a API C# estiver rodando e acessível em `http://localhost:8080` na sua máquina, você usará esse valor.
-   * Na raiz do projeto renomeie o arquivo .env.example para .env e substitua o valor de "URL_API_CSHARP_AQUI" para "http://localhost:8080" (ou a porta em que a API estiver rodando)
+O simulador precisa saber para onde enviar os eventos. Isso é feito através da variável de ambiente `CSHARP_API_BASE_URL`.
+* Quando a API C# estiver rodando e acessível em `http://localhost:8080` na sua máquina, você usará esse valor.
+* Na raiz do projeto renomeie o arquivo .env.example para .env e substitua o valor de "URL_API_CSHARP_AQUI" para "http://localhost:8080" (ou a porta em que a API estiver rodando)
 
 **3. Rodar o Container do Simulador Python:**
-     docker run --rm -d -p 9090:80 --name simulador-iot mottu-py-simulator
 
+```sh
+docker run --rm -d -p 9090:80 --name simulador-iot mottu-py-simulator
+```
 
 ## Como Usar o Simulador para Enviar Eventos para a API C#
 
